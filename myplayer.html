@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+var rndplay = false;
+var loopType = 0; //0=noloop 1=loop1 2=loopAll
+</script>
+
+<h1>The video element</h1>
+
+<button onclick="playArray()"> play next|></button>
+<button onclick="skip10s()"> 10sec>></button>
+<button onclick="play_pause(event)" id="playpause"> pause||</button>
+<br><br>
+<button onclick="randomMode()" id="btn_random"> !X </button>
+<img src="./images/noloop.png" id="img_loop" onclick="changeLoop()">
+<br>
+
+<video id="mediaPlayer" src="1.mp4" width="640" controls onended="playArray()" onclick="play_pause(event)">
+  Your browser does not support the video tag.
+</video>
+
+<div id="dropzone2" ondragover="allowDrop(event)" style="width:640px;height:40px;background-color:lightgreen;"></div>
+
+<p id="currentFile"></p>
+<p id="filepar">List file here:<br></p>
+
+<script>
+var ele = document.getElementById("mediaPlayer");
+var filelist = document.getElementById('filepar');
+
+var allFiles = ["1.mp4"];
+allFiles[1] = "คนไม่พิเศษ.mp4";
+allFiles[2] = "คู่แท้ - เบิร์ด ธงไชย【OFFICIAL MV】.mp4"
+
+for (var i = 0; i < allFiles.length; i++) {
+   filelist.innerHTML += allFiles[i] + "<BR>\n";
+}
+
+var index = 0;
+
+var temp;
+
+var dirPath="."
+
+function changeLoop(){
+	var img_loop = document.getElementById("img_loop");
+
+	loopType += 1
+	if(loopType == 3) {loopType = 0;}
+	if(loopType == 0) {img_loop.src = "images/noloop.png"}
+	if(loopType == 1) {img_loop.src = "images/loop1.png"}
+	if(loopType == 2) {img_loop.src = "images/loopall.png"}
+}
+
+function skip10s(){
+	ele.currentTime += 10;
+}
+
+function randomMode(){
+	rndplay = !rndplay;
+	var btn = document.getElementById("btn_random");
+	if(rndplay){
+		btn.innerText = "Shuffle";
+	} else {
+		btn.innerText = "Not Shuffle";
+	}
+}
+
+function play_pause(e){
+	e.preventDefault();
+	var btn = document.getElementById("playpause");
+	if(btn.innerText == "pause||"){
+		btn.innerText = "play>"
+		ele.pause()
+	} else {
+		btn.innerText = "pause||"
+		ele.play()
+	}
+}
+
+function playArray(){
+
+	if(loopType != 1) //Not loop for current file
+	{
+		if(!rndplay){
+			
+			index = index+1
+			if(index >= allFiles.length){
+				if(loopType == 0){return 0;} // no loop
+				else if(loopType == 2){ index=1; } //loop all
+			}
+		} else {
+			index = Math.floor(Math.random() * allFiles.length);
+		}
+	}
+	
+	var par = document.getElementById("currentFile");
+	par.innerHTML = "Now playing ["+index+"] " + allFiles[index];
+	
+	// video part
+	var ele = document.getElementById("mediaPlayer");
+    ele.src = dirPath + "/" + allFiles[index];
+    ele.load();
+	//ele.currentTime = 20;
+    ele.play();
+	ele.volume = 0.5;
+	
+	var btn = document.getElementById("playpause");
+	btn.innerText = "pause||"
+}
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+var dropfile;
+
+
+var dropzone2 = document.getElementById('dropzone2');
+dropzone2.ondrop = function(e) {
+  e.preventDefault();
+  var length = e.dataTransfer.items.length;
+  for (var i = 0; i < length; i++) {
+    var entry = e.dataTransfer.items[i].webkitGetAsEntry();
+	temp = e.dataTransfer;
+    if (entry.isFile) {
+      filelist.innerHTML += "[" + allFiles.length + "] " + entry.name + "<BR>\n";
+	  allFiles.push(entry.name);
+    } else if (entry.isDirectory) {
+      filelist.innerHTML += entry.fullPath + "<BR>\n";
+	  //dropfile = entry;
+    }
+  }
+};
+</script>
+
+
+</body>
+</html>
