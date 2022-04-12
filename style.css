@@ -1,0 +1,25 @@
+#filepar {
+    cursor: pointer;
+    margin: 0px;
+}
+
+
+#dropzone2 {
+    cursor: copy;
+}
+
+.listfile {
+    margin: 0px;
+    
+}
+p {
+    margin: 0px;
+}
+
+button{
+    cursor: pointer;
+}
+
+#img_loop {
+    cursor: pointer;
+}
