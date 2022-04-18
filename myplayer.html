@@ -4,155 +4,20 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<script>
-var rndplay = false;
-var loopType = 0; //0=noloop 1=loop1 2=loopAll
-</script>
 <video id="mediaPlayer" src="blackvideo.mp4" width="640" controls onended="playArray()">
   Your browser does not support the video tag.
 </video>
 <p id="currentFile">Untitle video</p>
-
-
 <button class="btn" onclick="backArray()">Back</button>
 <button class="btn" onclick="playArray()">next</button>
 <button class="btn" onclick="randomMode()" id="btn_random"> Shuffle </button>
 <img src="./images/noloop.png" id="img_loop" onclick="changeLoop()" class="btn">
 <button class="btn">Upload</button>
 <button onclick="clearlist()">Clearlisted</button>
-
-
 <div id="dropzone2" ondragover="allowDrop(event)" style="width:640px;height:40px;background-color:lightgreen;"></div>
 <p class="listfile">List file here:</p>
-<p id="filepar"></p>
+<div id="filepar"></div> <!--!change--->
 
-
-<script>
-var ele = document.getElementById("mediaPlayer");
-var filelist = document.getElementById('filepar');
-
-var allFiles = ["1.mp4"];
-allFiles[1] = "คนไม่พิเศษ.mp4";
-allFiles[2] = "คู่แท้ - เบิร์ด ธงไชย【OFFICIAL MV】.mp4"
-
-for (var i = 0; i < allFiles.length; i++) {
-   filelist.innerHTML += allFiles[i] + "<BR>\n";
-}
-
-var index = -1;
-
-var temp;
-
-var dirPath="."
-function clearlist() {
-	allFiles = [];
-	document.getElementById('filepar').innerHTML = "";
-	console.log(allFiles,allFiles.length);
-}
-
-function backArray() {
-	if(index != 0){
-	index = index - 1;
-	var par = document.getElementById("currentFile");
-	par.innerHTML = allFiles[index].replace(".mp4", "");
-	// video part
-	var ele = document.getElementById("mediaPlayer");
-	ele.src = dirPath + "/" + allFiles[index];
-	ele.load();
-	//ele.currentTime = 20;
-	ele.play();
-	ele.volume = 0.5;
-	}
-}
-
-function changeLoop(){
-	var img_loop = document.getElementById("img_loop");
-
-	loopType += 1
-	if(loopType == 3) {loopType = 0;}
-	if(loopType == 0) {img_loop.src = "images/noloop.png"}
-	if(loopType == 1) {img_loop.src = "images/loop1.png"}
-	if(loopType == 2) {img_loop.src = "images/loopall.png"}
-}
-
-function randomMode(){
-	allFiles = shuffleArray(allFiles)
-	console.log(allFiles)
-	index = 0;
-	console.log(index);
-	document.getElementById('filepar').innerHTML = "";
-
-	for (var i = 0; i < allFiles.length; i++) {
-		filelist.innerHTML += allFiles[i] + "<BR>\n";
-	}
-
-	var par = document.getElementById("currentFile");
-	par.innerHTML = allFiles[index].replace(".mp4", "");
-	var ele = document.getElementById("mediaPlayer");
-	ele.src = dirPath + "/" + allFiles[index];
-	ele.load();
-	ele.play();
-}
-
-function shuffleArray(array) {
-    let currentIndex = array.length,  randomIndex;
-
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-  }
-  return array;
-}
-
-function playArray(){
-	console.log(index)
-	if (loopType != 1) //Not loop for current file
-	{
-		index = (index + 1) % allFiles.length;
-	}
-	var par = document.getElementById("currentFile");
-	par.innerHTML = allFiles[index].replace(".mp4","");
-	// video part
-	var ele = document.getElementById("mediaPlayer");
-    ele.src = dirPath + "/" + allFiles[index];
-    ele.load();
-	//ele.currentTime = 20;
-    ele.play();
-	ele.volume = 0.5;
-	console.log(index)
-	//index = (index + 1) % allFiles.length; //ถ้าเป็นtype1ไม่ต้องบวก
-}
-
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-var dropfile;
-
-
-var dropzone2 = document.getElementById('dropzone2');
-dropzone2.ondrop = function(e) {
-  e.preventDefault();
-  var length = e.dataTransfer.items.length;
-  for (var i = 0; i < length; i++) {
-    var entry = e.dataTransfer.items[i].webkitGetAsEntry();
-	temp = e.dataTransfer;
-    if (entry.isFile) {
-      filelist.innerHTML += entry.name + "<BR>\n";
-	  allFiles.push(entry.name);
-    } else if (entry.isDirectory) {
-      filelist.innerHTML += entry.fullPath + "<BR>\n";
-	  //dropfile = entry;
-    }
-  }
-};
-</script>
-
-
+<script src="script.js"></script>
 </body>
 </html>
